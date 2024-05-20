@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const requireClient = async (
+const requireUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -14,4 +14,4 @@ const requireClient = async (
   return next();
 };
 
-export default requireClient;
+export default requireUser;

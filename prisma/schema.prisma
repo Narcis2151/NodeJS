@@ -19,12 +19,21 @@ model User {
 }
 
 model Account {
-  id           Int           @id @default(autoincrement())
-  name         String
-  balance      Float
-  userId       Int
-  user         User          @relation(fields: [userId], references: [id])
-  transactions Transaction[]
+  id               Int           @id @default(autoincrement())
+  name             String
+  balance          Float
+  currency         Currency
+  userId           Int
+  balanceUpdatedAt DateTime
+  user             User          @relation(fields: [userId], references: [id])
+  transactions     Transaction[]
+}
+
+enum Currency {
+  RON
+  USD
+  EUR
+  GBP
 }
 
 model Transaction {
