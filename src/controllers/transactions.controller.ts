@@ -6,11 +6,13 @@ import {
   getTransactions,
   getTransactionById,
   updateTransaction,
+  updateTransactionCategory,
 } from "../services/transactions.service";
 
 import {
   CreateTransactionInput,
   TransactionParams,
+  UpdateTransactionCategoryInput,
   UpdateTransactionInput,
 } from "../schemas/transactions.schemas";
 
@@ -62,6 +64,23 @@ export async function updateTransactionHandler(
       res.locals.user.userId,
       Number(req.params.transactionId),
       req.body
+    );
+    return res.status(200).send(transaction);
+  } catch (e: any) {
+    logger.error(e.message);
+    return res.status(400).send(e.message);
+  }
+}
+
+export async function updateTransactionCategoryHandler(
+  req: Request<TransactionParams, {}, UpdateTransactionCategoryInput["body"]>,
+  res: Response
+) {
+  try {
+    const transaction = await updateTransactionCategory(
+      res.locals.user.userId,
+      Number(req.params.transactionId),
+      req.body.categoryId
     );
     return res.status(200).send(transaction);
   } catch (e: any) {

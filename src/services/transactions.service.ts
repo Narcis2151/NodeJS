@@ -66,6 +66,26 @@ export async function updateTransaction(
   }
 }
 
+export async function updateTransactionCategory(
+  userId: number,
+  transactionId: number,
+  categoryId: number
+) {
+  try {
+    return await prisma.transaction.update({
+      where: {
+        userId: userId,
+        id: transactionId,
+      },
+      data: {
+        categoryId: categoryId,
+      },
+    });
+  } catch (error) {
+    throw new Error("Transaction not found");
+  }
+}
+
 export async function deleteTransaction(userId: number, transactionId: number) {
   try {
     return await prisma.transaction.delete({

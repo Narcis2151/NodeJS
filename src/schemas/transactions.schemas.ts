@@ -23,6 +23,12 @@ export const updateTransactionSchema = z.object({
     type: z.enum(["INCOME", "EXPENSE"], { required_error: "Type is required" }),
     description: z.string({ required_error: "Description is required" }),
     accountId: z.number({ required_error: "Account ID is required" }),
+  }),
+});
+
+export const updateTransactionCategorySchema = z.object({
+  params: transactionParamsSchema.shape.params,
+  body: z.object({
     categoryId: z.number({ required_error: "Category ID is required" }),
   }),
 });
@@ -32,3 +38,6 @@ export type TransactionParams = z.infer<
 >;
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
+export type UpdateTransactionCategoryInput = z.infer<
+  typeof updateTransactionCategorySchema
+>;
