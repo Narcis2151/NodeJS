@@ -9,6 +9,7 @@ import authRouter from "./routes/auth.routes";
 import accountsRouter from "./routes/accounts.routes";
 import categoriesRouter from "./routes/categories.routes";
 import transactionsRouter from "./routes/transactions.routes";
+import budgetsRouter from "./routes/budgets.routes";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/auth", authRouter);
 app.use("/accounts", accountsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/transactions", transactionsRouter);
+app.use("/budgets", budgetsRouter);
 
 app.listen(PORT, () => {
   logger.info("App is running!");
