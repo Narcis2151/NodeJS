@@ -18,7 +18,6 @@ import {
 
 export async function getAccountsHandler(req: Request, res: Response) {
   try {
-    console.log(res.locals.user.userId);
     const accounts = await getAccounts(+res.locals.user.userId);
     return res.status(200).send(accounts);
   } catch (e: any) {
