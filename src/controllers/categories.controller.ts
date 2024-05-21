@@ -14,7 +14,7 @@ import {
   UpdateCategoryNameInput,
 } from "../schemas/categories.schemas";
 
-export async function getCategoriesController(req: Request, res: Response) {
+export async function getCategoriesHandler(req: Request, res: Response) {
   try {
     const categories = await getCategories(+res.locals.user.userId);
     return res.status(200).send(categories);
@@ -24,7 +24,7 @@ export async function getCategoriesController(req: Request, res: Response) {
   }
 }
 
-export async function createCategoryController(
+export async function createCategoryHandler(
   req: Request<{}, {}, CreateCategoryInput["body"]>,
   res: Response
 ) {
@@ -37,7 +37,7 @@ export async function createCategoryController(
   }
 }
 
-export async function getCategoryByIdController(
+export async function getCategoryByIdHandler(
   req: Request<CategoryParams>,
   res: Response
 ) {
@@ -53,7 +53,7 @@ export async function getCategoryByIdController(
   }
 }
 
-export async function updateCategoryNameController(
+export async function updateCategoryNameHandler(
   req: Request<CategoryParams, {}, UpdateCategoryNameInput["body"]>,
   res: Response
 ) {
@@ -70,7 +70,7 @@ export async function updateCategoryNameController(
   }
 }
 
-export async function deleteCategoryController(
+export async function deleteCategoryHandler(
   req: Request<CategoryParams>,
   res: Response
 ) {

@@ -1,13 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import logger from "./utils/logger";
+import deserializeUser from "./middleware/deserializeUser";
 import heartbeatRouter from "./routes/heartbeat.routes";
 import authRouter from "./routes/auth.routes";
 import accountsRouter from "./routes/accounts.routes";
 import categoriesRouter from "./routes/categories.routes";
-import cors from "cors";
-import deserializeUser from "./middleware/deserializeUser";
+import transactionsRouter from "./routes/transactions.routes";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use("/heartbeat", heartbeatRouter);
 app.use("/auth", authRouter);
 app.use("/accounts", accountsRouter);
 app.use("/categories", categoriesRouter);
+app.use("/transactions", transactionsRouter);
 
 app.listen(PORT, () => {
   logger.info("App is running!");

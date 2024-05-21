@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  createCategoryController,
-  deleteCategoryController,
-  getCategoryByIdController,
-  getCategoriesController,
-  updateCategoryNameController,
+  createCategoryHandler,
+  deleteCategoryHandler,
+  getCategoryByIdHandler,
+  getCategoriesHandler,
+  updateCategoryNameHandler,
 } from "../controllers/categories.controller";
 import {
   categoryParamsSchema,
@@ -17,26 +17,26 @@ import requireUser from "../middleware/requireUser";
 
 const router = Router();
 
-router.get("/", requireUser, getCategoriesController);
+router.get("/", requireUser, getCategoriesHandler);
 router.post(
   "/",
   [requireUser, validate(createCategorySchema)],
-  createCategoryController
+  createCategoryHandler
 );
 router.get(
   "/:categoryId",
   [requireUser, validate(categoryParamsSchema)],
-  getCategoryByIdController
+  getCategoryByIdHandler
 );
 router.put(
   "/:categoryId/name",
   [requireUser, validate(updateCategoryNameSchema)],
-  updateCategoryNameController
+  updateCategoryNameHandler
 );
 router.delete(
   "/:categoryId",
   [requireUser, validate(categoryParamsSchema)],
-  deleteCategoryController
+  deleteCategoryHandler
 );
 
 export default router;
