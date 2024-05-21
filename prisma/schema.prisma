@@ -9,9 +9,10 @@ datasource db {
 
 model User {
   id           Int           @id @default(autoincrement())
-  email        String        @unique
-  username     String
-  password     String
+  githubId     String        @unique
+  email        String?       @unique
+  username     String?
+  password     String?
   accounts     Account[]
   budgets      Budget[]
   categories   Category[]
@@ -37,16 +38,16 @@ enum Currency {
 }
 
 model Transaction {
-  id          Int      @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   amount      Float
   type        TransactionType
   description String
   accountId   Int
   categoryId  Int
   userId      Int
-  account     Account  @relation(fields: [accountId], references: [id])
-  category    Category @relation(fields: [categoryId], references: [id])
-  user        User     @relation(fields: [userId], references: [id])
+  account     Account         @relation(fields: [accountId], references: [id])
+  category    Category        @relation(fields: [categoryId], references: [id])
+  user        User            @relation(fields: [userId], references: [id])
 }
 
 enum TransactionType {

@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import passport from "passport";
+import session from "express-session";
+
 
 import logger from "./utils/logger";
 import deserializeUser from "./middleware/deserializeUser";
@@ -20,6 +23,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(deserializeUser);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use("/heartbeat", heartbeatRouter);
 app.use("/auth", authRouter);
 app.use("/accounts", accountsRouter);
