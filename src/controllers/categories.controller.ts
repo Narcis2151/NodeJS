@@ -16,7 +16,7 @@ import {
 
 export async function getCategoriesHandler(req: Request, res: Response) {
   try {
-    const categories = await getCategories(+res.locals.user.userId);
+    const categories = await getCategories(+res.locals.user);
     return res.status(200).send(categories);
   } catch (e: any) {
     logger.error(e.message);
@@ -29,7 +29,7 @@ export async function createCategoryHandler(
   res: Response
 ) {
   try {
-    const category = await createCategory(res.locals.user.userId, req.body);
+    const category = await createCategory(res.locals.user, req.body);
     return res.status(201).send(category);
   } catch (e: any) {
     logger.error(e.message);
@@ -43,7 +43,7 @@ export async function getCategoryByIdHandler(
 ) {
   try {
     const category = await getCategoryById(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.categoryId)
     );
     return res.status(200).send(category);
@@ -59,7 +59,7 @@ export async function updateCategoryNameHandler(
 ) {
   try {
     const updatedCategory = await updateCategoryName(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.categoryId),
       req.body
     );
@@ -75,7 +75,7 @@ export async function deleteCategoryHandler(
   res: Response
 ) {
   try {
-    await deleteCategory(res.locals.user.userId, Number(req.params.categoryId));
+    await deleteCategory(res.locals.user, Number(req.params.categoryId));
     return res.status(204).send();
   } catch (e: any) {
     logger.error(e.message);

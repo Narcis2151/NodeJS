@@ -18,7 +18,7 @@ import {
 
 export async function getTransactionsHandler(req: Request, res: Response) {
   try {
-    const transactions = await getTransactions(+res.locals.user.userId);
+    const transactions = await getTransactions(+res.locals.user);
     return res.status(200).send(transactions);
   } catch (e: any) {
     logger.error(e.message);
@@ -31,7 +31,7 @@ export async function createTransactionHandler(
   res: Response
 ) {
   try {
-    const transaction = await createTransaction(res.locals.user.userId, req.body);
+    const transaction = await createTransaction(res.locals.user, req.body);
     return res.status(201).send(transaction);
   } catch (e: any) {
     logger.error(e.message);
@@ -45,7 +45,7 @@ export async function getTransactionByIdHandler(
 ) {
   try {
     const transaction = await getTransactionById(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.transactionId)
     );
     return res.status(200).send(transaction);
@@ -61,7 +61,7 @@ export async function updateTransactionHandler(
 ) {
   try {
     const transaction = await updateTransaction(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.transactionId),
       req.body
     );
@@ -78,7 +78,7 @@ export async function updateTransactionCategoryHandler(
 ) {
   try {
     const transaction = await updateTransactionCategory(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.transactionId),
       req.body.categoryId
     );
@@ -94,7 +94,7 @@ export async function deleteTransactionHandler(
   res: Response
 ) {
   try {
-    await deleteTransaction(res.locals.user.userId, Number(req.params.transactionId));
+    await deleteTransaction(res.locals.user, Number(req.params.transactionId));
     return res.status(204).send();
   } catch (e: any) {
     logger.error(e.message);

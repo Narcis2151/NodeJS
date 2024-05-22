@@ -46,7 +46,7 @@ passport.deserializeUser(async (id: number, done) => {
     const user = await prisma.user.findUnique({
       where: { id },
     });
-    done(null, user);
+    done(null, user!.id);
   } catch (error) {
     done(error, null);
   }

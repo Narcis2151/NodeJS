@@ -18,7 +18,8 @@ import {
 
 export async function getAccountsHandler(req: Request, res: Response) {
   try {
-    const accounts = await getAccounts(+res.locals.user.userId);
+    console.log(res.locals.user);
+    const accounts = await getAccounts(+res.locals.user);
     return res.status(200).send(accounts);
   } catch (e: any) {
     logger.error(e.message);
@@ -31,7 +32,7 @@ export async function createAccountHandler(
   res: Response
 ) {
   try {
-    const account = await createAccount(res.locals.user.userId, req.body);
+    const account = await createAccount(res.locals.user, req.body);
     return res.status(201).send(account);
   } catch (e: any) {
     logger.error(e.message);
@@ -61,7 +62,7 @@ export async function updateAccountNameHandler(
 ) {
   try {
     const account = await updateAccountName(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.accountId),
       req.body
     );
@@ -78,7 +79,7 @@ export async function updateAccountBalanceHandler(
 ) {
   try {
     const account = await updateAccountBalance(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.accountId),
       req.body
     );
@@ -94,7 +95,7 @@ export async function deleteAccountHandler(
   res: Response
 ) {
   try {
-    await deleteAccount(res.locals.user.userId, Number(req.params.accountId));
+    await deleteAccount(res.locals.user, Number(req.params.accountId));
     return res.status(204).send();
   } catch (e: any) {
     logger.error(e.message);

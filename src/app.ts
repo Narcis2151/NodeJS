@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
+import "./config/passport"; // Import passport configuration
 
 
 import logger from "./utils/logger";
@@ -22,7 +23,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(deserializeUser);
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -32,6 +32,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(deserializeUser);
 app.use("/heartbeat", heartbeatRouter);
 app.use("/auth", authRouter);
 app.use("/accounts", accountsRouter);

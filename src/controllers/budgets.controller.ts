@@ -18,7 +18,7 @@ import {
 
 export async function getBudgetsHandler(req: Request, res: Response) {
   try {
-    const budgets = await getBudgets(+res.locals.user.userId);
+    const budgets = await getBudgets(+res.locals.user);
     return res.status(200).send(budgets);
   } catch (e: any) {
     logger.error(e.message);
@@ -31,7 +31,7 @@ export async function createBudgetHandler(
   res: Response
 ) {
   try {
-    const budget = await createBudget(res.locals.user.userId, req.body);
+    const budget = await createBudget(res.locals.user, req.body);
     return res.status(201).send(budget);
   } catch (e: any) {
     logger.error(e.message);
@@ -45,7 +45,7 @@ export async function getBudgetByIdHandler(
 ) {
   try {
     const budget = await getBudgetById(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.budgetId)
     );
     return res.status(200).send(budget);
@@ -61,7 +61,7 @@ export async function updateBudgetAmountHandler(
 ) {
   try {
     const budget = await updateBudgetAmount(
-      res.locals.user.userId,
+      res.locals.user,
       Number(req.params.budgetId),
       req.body
     );
@@ -77,7 +77,7 @@ export async function deleteBudgetHandler(
   res: Response
 ) {
   try {
-    await deleteBudget(res.locals.user.userId, Number(req.params.budgetId));
+    await deleteBudget(res.locals.user, Number(req.params.budgetId));
     return res.status(204).send();
   } catch (e: any) {
     logger.error(e.message);

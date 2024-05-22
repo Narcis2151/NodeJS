@@ -8,18 +8,26 @@ const deserializeUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const accessToken = get(req, "headers.authorization", "").replace(
-    /^Bearer\s/,
-    ""
-  );
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const accessToken = get(req, "headers.authorization", "").replace(
+      /^Bearer\s/,
+      ""
+    );
 
-  if (!accessToken) {
-    return next();
+    if (!accessToken) {
+      return next();
+    }
+    const { decoded, payload } = verifyJwt(accessToken);
+
+    if (decoded) {
+      res.locals.user = payload.userId;
+      return next();
+    }
   }
-  const { decoded, payload } = verifyJwt(accessToken);
 
-  if (decoded) {
-    res.locals.user = payload;
+  if (req.isAuthenticated()) {
+    res.locals.user = (req.user as any);
     return next();
   }
 
