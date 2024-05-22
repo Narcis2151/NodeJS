@@ -6,6 +6,13 @@ export const transactionParamsSchema = z.object({
   }),
 });
 
+export const fetchTransactionsSchema = z.object({
+  query: z.object({
+    page: z.string().optional(),
+    limit: z.string().optional(),
+  }),
+});
+
 export const createTransactionSchema = z.object({
   body: z.object({
     amount: z.number({ required_error: "Amount is required" }),
@@ -36,6 +43,7 @@ export const updateTransactionCategorySchema = z.object({
 export type TransactionParams = z.infer<
   typeof transactionParamsSchema.shape.params
 >;
+export type FetchTransactionsInput = z.infer<typeof fetchTransactionsSchema>;
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
 export type UpdateTransactionCategoryInput = z.infer<

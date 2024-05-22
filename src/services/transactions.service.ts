@@ -6,11 +6,18 @@ import {
 
 const prisma = new PrismaClient();
 
-export async function getTransactions(userId: number) {
+export async function getTransactions(
+  userId: number,
+  page: number,
+  limit: number
+) {
+  const skip = (page - 1) * limit;
   return await prisma.transaction.findMany({
     where: {
       userId: userId,
     },
+    skip: skip,
+    take: limit,
   });
 }
 

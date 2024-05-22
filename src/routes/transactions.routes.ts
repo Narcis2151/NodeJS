@@ -9,6 +9,7 @@ import {
   updateTransactionCategoryHandler,
 } from "../controllers/transactions.controller";
 import {
+  fetchTransactionsSchema,
   createTransactionSchema,
   transactionParamsSchema,
   updateTransactionSchema,
@@ -19,7 +20,7 @@ import requireUser from "../middleware/requireUser";
 
 const router = Router();
 
-router.get("/", requireUser, getTransactionsHandler);
+router.get("/", [requireUser, validate(fetchTransactionsSchema)], getTransactionsHandler);
 router.post(
   "/",
   [requireUser, validate(createTransactionSchema)],

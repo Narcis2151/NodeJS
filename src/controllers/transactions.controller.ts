@@ -11,14 +11,21 @@ import {
 
 import {
   CreateTransactionInput,
+  FetchTransactionsInput,
   TransactionParams,
   UpdateTransactionCategoryInput,
   UpdateTransactionInput,
 } from "../schemas/transactions.schemas";
 
-export async function getTransactionsHandler(req: Request, res: Response) {
+export async function getTransactionsHandler(
+  req: Request<{}, {}, {}, FetchTransactionsInput["query"]>,
+  res: Response
+) {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+
   try {
-    const transactions = await getTransactions(+res.locals.user);
+    const transactions = await getTransactions(+res.locals.user, page, limit);
     return res.status(200).send(transactions);
   } catch (e: any) {
     logger.error(e.message);
@@ -101,6 +108,3 @@ export async function deleteTransactionHandler(
     return res.status(400).send(e.message);
   }
 }
-
-
-
