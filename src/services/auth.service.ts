@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Currency } from "@prisma/client";
 import { signJwt } from "../utils/jwt";
 import bcrypt from "bcrypt";
 
@@ -17,14 +18,44 @@ export async function registerUser(registerUserInput: RegisterUserInput) {
     throw new Error("Email already registered");
   }
 
+  const defaultCategories = [
+    "Groceries",
+    "Rent",
+    "Utilities",
+    "Transportation",
+    "Health",
+    "Entertainment",
+    "Other",
+  ];
+  const defaultAccounts = [
+    { name: "Cash", balance: 0, currency: Currency.RON },
+    { name: "Bank", balance: 0, currency: Currency.EUR },
+    { name: "Credit Card", balance: 0, currency: Currency.USD },
+  ];
+
   const user = await prisma.user.create({
     data: {
       username: registerUserInput.username,
       email: registerUserInput.email,
       password: await bcrypt.hash(registerUserInput.password, 10),
+      categories: {
+        create: defaultCategories.map((category) => ({ name: category })),
+      },
+      accounts: {
+        create: defaultAccounts.map((account) => ({
+          name: account.name,
+          balance: account.balance,
+          currency: account.currency,
+          balanceUpdatedAt: new Date(),
+        })),
+      },
     },
     select: {
       id: true,
+      username: true,
+      email: true,
+      categories: true,
+      accounts: true,
     },
   });
   const accessToken = signJwt({ userId: user.id });
@@ -44,7 +75,7 @@ export async function loginUser(loginUserInput: LoginUserInput) {
 
   const passwordMatch = await bcrypt.compare(
     loginUserInput.password,
-    user.password
+    user.password!
   );
 
   if (!passwordMatch) {

@@ -1,7 +1,8 @@
-import passport from "passport";
-import { Strategy as GitHubStrategy } from "passport-github2";
-import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
+import { Currency } from "@prisma/client";
+import { Strategy as GitHubStrategy } from "passport-github2";
+import passport from "passport";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -21,11 +22,39 @@ passport.use(
         });
 
         if (!user) {
+          const defaultCategories = [
+            "Groceries",
+            "Rent",
+            "Utilities",
+            "Transportation",
+            "Health",
+            "Entertainment",
+            "Other",
+          ];
+          const defaultAccounts = [
+            { name: "Cash", balance: 0, currency: Currency.RON },
+            { name: "Bank", balance: 0, currency: Currency.EUR },
+            { name: "Credit Card", balance: 0, currency: Currency.USD },
+          ];
+
           user = await prisma.user.create({
             data: {
               githubId: profile.id,
               username: profile.username,
               email: profile.emails?.[0].value,
+              categories: {
+                create: defaultCategories.map((category) => ({
+                  name: category,
+                })),
+              },
+              accounts: {
+                create: defaultAccounts.map((account) => ({
+                  name: account.name,
+                  balance: account.balance,
+                  currency: account.currency,
+                  balanceUpdatedAt: new Date(),
+                })),
+              },
             },
           });
         }
