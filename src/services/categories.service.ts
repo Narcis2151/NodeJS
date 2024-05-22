@@ -68,9 +68,26 @@ export async function updateCategoryName(
   }
 }
 
-export async function deleteCategory(userId: number, categoryId: number) {
+export async function deleteCategory(userId: number, categoryId: number, newCategoryId: number) {
   try {
-    return await prisma.category.delete({
+    await prisma.transaction.updateMany({
+      where: {
+        userId: userId,
+        categoryId: categoryId
+      },
+      data: {
+        categoryId: newCategoryId
+      }
+    });
+
+    await prisma.budget.deleteMany({
+      where: {
+        userId: userId,
+        categoryId: categoryId
+      }
+    });
+
+    await prisma.category.delete({
       where: {
         userId: userId,
         id: categoryId,

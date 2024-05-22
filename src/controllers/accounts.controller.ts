@@ -6,6 +6,7 @@ import {
   UpdateAccountNameInput,
   UpdateAccountBalanceInput,
   AccountParams,
+  DeleteAccountInput,
 } from "../schemas/accounts.schemas";
 import {
   createAccount,
@@ -91,11 +92,11 @@ export async function updateAccountBalanceHandler(
 }
 
 export async function deleteAccountHandler(
-  req: Request<AccountParams>,
+  req: Request<DeleteAccountInput["params"], {}, DeleteAccountInput["body"]>,
   res: Response
 ) {
   try {
-    await deleteAccount(res.locals.user, Number(req.params.accountId));
+    await deleteAccount(res.locals.user, Number(req.params.accountId), req.body.newAccountId);
     return res.status(204).send();
   } catch (e: any) {
     logger.error(e.message);

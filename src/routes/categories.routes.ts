@@ -9,6 +9,7 @@ import {
 import {
   categoryParamsSchema,
   createCategorySchema,
+  deleteCategorySchema,
   updateCategoryNameSchema,
 } from "../schemas/categories.schemas";
 
@@ -35,7 +36,7 @@ router.put(
 );
 router.delete(
   "/:categoryId",
-  [requireUser, validate(categoryParamsSchema)],
+  [requireUser, validate(deleteCategorySchema)],
   deleteCategoryHandler
 );
 

@@ -11,6 +11,7 @@ import {
 import {
   CategoryParams,
   CreateCategoryInput,
+  DeleteCategoryInput,
   UpdateCategoryNameInput,
 } from "../schemas/categories.schemas";
 
@@ -71,11 +72,11 @@ export async function updateCategoryNameHandler(
 }
 
 export async function deleteCategoryHandler(
-  req: Request<CategoryParams>,
+  req: Request<DeleteCategoryInput["params"], {}, DeleteCategoryInput["body"]>,
   res: Response
 ) {
   try {
-    await deleteCategory(res.locals.user, Number(req.params.categoryId));
+    await deleteCategory(res.locals.user, Number(req.params.categoryId), req.body.newCategoryId);
     return res.status(204).send();
   } catch (e: any) {
     logger.error(e.message);

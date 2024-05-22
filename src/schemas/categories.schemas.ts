@@ -19,6 +19,14 @@ export const updateCategoryNameSchema = z.object({
   }),
 });
 
+export const deleteCategorySchema = z.object({
+  params: categoryParamsSchema.shape.params,
+  body: z.object({
+    newCategoryId: z.number({required_error: 'New Category ID is required'}),
+  }),
+});
+
 export type CategoryParams = z.infer<typeof categoryParamsSchema.shape.params>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryNameInput = z.infer<typeof updateCategoryNameSchema>;
+export type DeleteCategoryInput = z.infer<typeof deleteCategorySchema>;

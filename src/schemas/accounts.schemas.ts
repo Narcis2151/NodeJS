@@ -33,9 +33,17 @@ export const updateAccountBalanceSchema = z.object({
   }),
 });
 
+export const deleteAccountSchema = z.object({
+  params: accountParamsSchema.shape.params,
+  body: z.object({
+    newAccountId: z.number({ required_error: "New Account ID is required" }),
+  }),
+});
+
 export type AccountParams = z.infer<typeof accountParamsSchema.shape.params>;
 export type CreateAccountInput = z.infer<typeof createAccountSchema>;
 export type UpdateAccountNameInput = z.infer<typeof updateAccountNameSchema>;
 export type UpdateAccountBalanceInput = z.infer<
   typeof updateAccountBalanceSchema
 >;
+export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>;

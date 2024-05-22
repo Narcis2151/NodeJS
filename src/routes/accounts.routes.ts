@@ -10,6 +10,7 @@ import {
 import {
   accountParamsSchema,
   createAccountSchema,
+  deleteAccountSchema,
   updateAccountBalanceSchema,
   updateAccountNameSchema,
 } from "../schemas/accounts.schemas";
@@ -40,7 +41,7 @@ router.put(
 );
 router.delete(
   "/:accountId",
-  [requireUser, validate(accountParamsSchema)],
+  [requireUser, validate(deleteAccountSchema)],
   deleteAccountHandler
 );
 
