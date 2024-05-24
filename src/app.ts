@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
-import "./config/passport"; // Import passport configuration
+import { setupSwagger } from './swagger';
+import "./config/passport"; 
 
 
 import logger from "./utils/logger";
@@ -39,6 +40,8 @@ app.use("/accounts", accountsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/transactions", transactionsRouter);
 app.use("/budgets", budgetsRouter);
+
+setupSwagger(app);
 
 app.listen(PORT, () => {
   logger.info("App is running!");
