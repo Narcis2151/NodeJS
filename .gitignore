@@ -1,5 +1,3 @@
 node_modules
 dist
 .env
-private.pem
-public.pem
