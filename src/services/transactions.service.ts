@@ -43,6 +43,29 @@ export async function createTransaction(
   userId: number,
   data: CreateTransactionInput["body"]
 ) {
+  const account = await prisma.account.findUnique({
+    where: {
+      id: data.accountId,
+    },
+  });
+  const newAccountBalance =
+    data.type === "INCOME"
+      ? account!.balance + data.amount
+      : account!.balance - data.amount;
+  if (newAccountBalance < 0) {
+    throw new Error("Insufficient funds");
+  }
+
+  await prisma.account.update({
+    where: {
+      id: data.accountId,
+    },
+    data: {
+      balance: newAccountBalance,
+      balanceUpdatedAt: new Date(),
+    },
+  });
+
   const createdTransaction = await prisma.transaction.create({
     data: {
       amount: data.amount,
@@ -121,6 +144,41 @@ export async function updateTransaction(
   transactionId: number,
   data: UpdateTransactionInput["body"]
 ) {
+  const account = await prisma.account.findUnique({
+    where: {
+      id: data.accountId,
+    },
+  });
+
+  const transaction = await prisma.transaction.findUnique({
+    where: {
+      userId: userId,
+      id: transactionId,
+    },
+  });
+
+  if (!transaction) {
+    throw new Error("Transaction not found");
+  }
+
+  const newAccountBalance =
+    data.type === "INCOME"
+      ? account!.balance + data.amount
+      : account!.balance - data.amount;
+  if (newAccountBalance < 0) {
+    throw new Error("Insufficient funds");
+  }
+
+  await prisma.account.update({
+    where: {
+      id: data.accountId,
+    },
+    data: {
+      balance: newAccountBalance,
+      balanceUpdatedAt: new Date(),
+    },
+  });
+
   try {
     return await prisma.transaction.update({
       where: {
