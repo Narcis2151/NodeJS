@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only src/app.ts"
+    "dev": "tsnd --respawn --transpile-only src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",

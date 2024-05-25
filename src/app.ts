@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
-import { setupSwagger } from './swagger';
-import "./config/passport"; 
-
+import { setupSwagger } from "./swagger";
+import "./config/passport";
 
 import logger from "./utils/logger";
 import deserializeUser from "./middleware/deserializeUser";
@@ -29,6 +28,11 @@ app.use(
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 60000,
+    },
   })
 );
 app.use(passport.initialize());

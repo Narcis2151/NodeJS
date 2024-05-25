@@ -47,10 +47,11 @@ Make sure you have the following installed:
   npx prisma generate
   ```
 
-5. Start the development server:
+5. Build and start the server:
 
 ```bash
-yarn run dev
+yarn run build
+yarn run start
 ```
 
 The server will start on `http://localhost:3000`.

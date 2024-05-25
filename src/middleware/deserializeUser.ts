@@ -27,7 +27,7 @@ const deserializeUser = async (
   }
 
   if (req.isAuthenticated()) {
-    res.locals.user = (req.user as any);
+    res.locals.user = req.user as any;
     return next();
   }
 
