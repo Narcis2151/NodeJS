@@ -12,6 +12,13 @@ export async function getAccounts(userId: number) {
     where: {
       userId: userId,
     },
+    select: {
+      id: true,
+      name: true,
+      currency: true,
+      balance: true,
+      balanceUpdatedAt: true,
+    },
   });
 }
 
@@ -29,6 +36,13 @@ export async function createAccount(
         },
       },
     },
+    select: {
+      id: true,
+      name: true,
+      currency: true,
+      balance: true,
+      balanceUpdatedAt: true,
+    },
   });
 
   return createdAccount;
@@ -39,6 +53,13 @@ export async function getAccountById(userId: number, accountId: number) {
     where: {
       userId: userId,
       id: accountId,
+    },
+    select: {
+      id: true,
+      name: true,
+      currency: true,
+      balance: true,
+      balanceUpdatedAt: true,
     },
   });
 
@@ -63,6 +84,13 @@ export async function updateAccountName(
       data: {
         ...data,
       },
+      select: {
+        id: true,
+        name: true,
+        currency: true,
+        balance: true,
+        balanceUpdatedAt: true,
+      },
     });
   } catch (e: any) {
     throw new Error("Failed to update account name");
@@ -83,6 +111,13 @@ export async function updateAccountBalance(
       data: {
         balanceUpdatedAt: new Date(),
         ...data,
+      },
+      select: {
+        id: true,
+        name: true,
+        currency: true,
+        balance: true,
+        balanceUpdatedAt: true,
       },
     });
   } catch (e: any) {

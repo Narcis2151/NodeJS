@@ -12,6 +12,10 @@ export async function getCategories(userId: number) {
     where: {
       userId: userId,
     },
+    select: {
+      id: true,
+      name: true,
+    },
   });
 }
 
@@ -28,6 +32,10 @@ export async function createCategory(
         },
       },
     },
+    select: {
+      id: true,
+      name: true,
+    },
   });
 
   return createdCategory;
@@ -38,6 +46,10 @@ export async function getCategoryById(userId: number, categoryId: number) {
     where: {
       userId: userId,
       id: categoryId,
+    },
+    select: {
+      id: true,
+      name: true,
     },
   });
 
@@ -62,6 +74,10 @@ export async function updateCategoryName(
       data: {
         name: data.name,
       },
+      select: {
+        id: true,
+        name: true,
+      },
     });
   } catch (error) {
     throw new Error("Failed to update category name");
@@ -70,9 +86,8 @@ export async function updateCategoryName(
 
 export async function deleteCategory(userId: number, categoryId: number, newCategoryId: number) {
   try {
-    await prisma.transaction.updateMany({
+    await prisma.transactionCategory.updateMany({
       where: {
-        userId: userId,
         categoryId: categoryId
       },
       data: {

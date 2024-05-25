@@ -12,12 +12,17 @@ export async function getBudgets(userId: number) {
       userId: userId,
     },
     include: {
-      category: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
   const returnedBudgets = [];
   for (const budget of budgets) {
-    const spentAmount = await prisma.transaction.aggregate({
+    const spentAmount = await prisma.transactionCategory.aggregate({
       where: {
         categoryId: budget.categoryId,
       },
@@ -27,8 +32,10 @@ export async function getBudgets(userId: number) {
     });
 
     returnedBudgets.push({
-      ...budget,
-      spentAmount: spentAmount._sum.amount || 0,
+      id: budget.id,
+      amountAvailable: budget.amountAvailable,
+      category: budget.category,
+      amountSpent: spentAmount._sum.amount || 0,
     });
   }
 
@@ -45,10 +52,15 @@ export async function createBudget(
       userId: userId,
     },
     include: {
-      category: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
-  const spentAmount = await prisma.transaction.aggregate({
+  const spentAmount = await prisma.transactionCategory.aggregate({
     where: {
       categoryId: createdBudget.categoryId,
     },
@@ -58,8 +70,10 @@ export async function createBudget(
   });
 
   return {
-    ...createdBudget,
-    spentAmount: spentAmount._sum.amount || 0,
+    id: createdBudget.id,
+    amountAvailable: createdBudget.amountAvailable,
+    category: createdBudget.category,
+    amountSpent: spentAmount._sum.amount || 0,
   };
 }
 
@@ -70,7 +84,12 @@ export async function getBudgetById(userId: number, budgetId: number) {
       id: budgetId,
     },
     include: {
-      category: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 
@@ -78,7 +97,7 @@ export async function getBudgetById(userId: number, budgetId: number) {
     throw new Error("Budget not found");
   }
 
-  const spentAmount = await prisma.transaction.aggregate({
+  const spentAmount = await prisma.transactionCategory.aggregate({
     where: {
       categoryId: budget.categoryId,
     },
@@ -87,7 +106,12 @@ export async function getBudgetById(userId: number, budgetId: number) {
     },
   });
 
-  return budget;
+  return {
+    id: budget.id,
+    amountAvailable: budget.amountAvailable,
+    category: budget.category,
+    amountSpent: spentAmount._sum.amount || 0,
+  };
 }
 
 export async function updateBudgetAmount(
@@ -105,11 +129,16 @@ export async function updateBudgetAmount(
         amountAvailable: data.amountAvailable,
       },
       include: {
-        category: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 
-    const spentAmount = await prisma.transaction.aggregate({
+    const spentAmount = await prisma.transactionCategory.aggregate({
       where: {
         categoryId: budget.categoryId,
       },
@@ -119,8 +148,10 @@ export async function updateBudgetAmount(
     });
 
     return {
-      ...budget,
-      spentAmount: spentAmount._sum.amount || 0,
+      id: budget.id,
+      amountAvailable: budget.amountAvailable,
+      category: budget.category,
+      anountSpent: spentAmount._sum.amount || 0,
     };
   } catch (error) {
     throw new Error("Budget not found");

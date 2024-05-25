@@ -19,7 +19,14 @@ export const createTransactionSchema = z.object({
     type: z.enum(["INCOME", "EXPENSE"], { required_error: "Type is required" }),
     description: z.string({ required_error: "Description is required" }),
     accountId: z.number({ required_error: "Account ID is required" }),
-    categoryId: z.number({ required_error: "Category ID is required" }),
+    categories: z
+      .array(
+        z.object({
+          categoryId: z.number({ required_error: "Category ID is required" }),
+          amount: z.number({ required_error: "Amount is required" }),
+        })
+      )
+      .min(1, { message: "At least one category is required" }),
   }),
 });
 
@@ -36,7 +43,14 @@ export const updateTransactionSchema = z.object({
 export const updateTransactionCategorySchema = z.object({
   params: transactionParamsSchema.shape.params,
   body: z.object({
-    categoryId: z.number({ required_error: "Category ID is required" }),
+    categories: z
+      .array(
+        z.object({
+          categoryId: z.number({ required_error: "Category ID is required" }),
+          amount: z.number({ required_error: "Amount is required" }),
+        })
+      )
+      .min(1, { message: "At least one category is required" }),
   }),
 });
 

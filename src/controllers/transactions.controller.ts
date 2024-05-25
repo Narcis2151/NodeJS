@@ -6,7 +6,7 @@ import {
   getTransactions,
   getTransactionById,
   updateTransaction,
-  updateTransactionCategory,
+  updateTransactionCategories,
 } from "../services/transactions.service";
 
 import {
@@ -84,10 +84,10 @@ export async function updateTransactionCategoryHandler(
   res: Response
 ) {
   try {
-    const transaction = await updateTransactionCategory(
+    const transaction = await updateTransactionCategories(
       res.locals.user,
       Number(req.params.transactionId),
-      req.body.categoryId
+      req.body.categories
     );
     return res.status(200).send(transaction);
   } catch (e: any) {

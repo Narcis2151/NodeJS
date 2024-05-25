@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import {
   CreateTransactionInput,
+  UpdateTransactionCategoryInput,
   UpdateTransactionInput,
 } from "../schemas/transactions.schemas";
 
@@ -16,6 +17,23 @@ export async function getTransactions(
     where: {
       userId: userId,
     },
+    select: {
+      id: true,
+      amount: true,
+      type: true,
+      description: true,
+      TransactionCategory: {
+        select: {
+          categoryId: true,
+          amount: true,
+        },
+      },
+      account: {
+        select: {
+          currency: true,
+        },
+      },
+    },
     skip: skip,
     take: limit,
   });
@@ -27,8 +45,36 @@ export async function createTransaction(
 ) {
   const createdTransaction = await prisma.transaction.create({
     data: {
-      ...data,
+      amount: data.amount,
+      type: data.type,
+      description: data.description,
+      accountId: data.accountId,
       userId: userId,
+      TransactionCategory: {
+        createMany: {
+          data: data.categories.map((category) => ({
+            categoryId: category.categoryId,
+            amount: category.amount,
+          })),
+        },
+      },
+    },
+    select: {
+      id: true,
+      amount: true,
+      type: true,
+      description: true,
+      TransactionCategory: {
+        select: {
+          categoryId: true,
+          amount: true,
+        },
+      },
+      account: {
+        select: {
+          currency: true,
+        },
+      },
     },
   });
 
@@ -43,6 +89,23 @@ export async function getTransactionById(
     where: {
       userId: userId,
       id: transactionId,
+    },
+    select: {
+      id: true,
+      amount: true,
+      type: true,
+      description: true,
+      TransactionCategory: {
+        select: {
+          categoryId: true,
+          amount: true,
+        },
+      },
+      account: {
+        select: {
+          currency: true,
+        },
+      },
     },
   });
 
@@ -67,16 +130,33 @@ export async function updateTransaction(
       data: {
         ...data,
       },
+      select: {
+        id: true,
+        amount: true,
+        type: true,
+        description: true,
+        TransactionCategory: {
+          select: {
+            categoryId: true,
+            amount: true,
+          },
+        },
+        account: {
+          select: {
+            currency: true,
+          },
+        },
+      },
     });
   } catch (error) {
     throw new Error("Transaction not found");
   }
 }
 
-export async function updateTransactionCategory(
+export async function updateTransactionCategories(
   userId: number,
   transactionId: number,
-  categoryId: number
+  categories: UpdateTransactionCategoryInput["body"]["categories"]
 ) {
   try {
     return await prisma.transaction.update({
@@ -85,7 +165,32 @@ export async function updateTransactionCategory(
         id: transactionId,
       },
       data: {
-        categoryId: categoryId,
+        TransactionCategory: {
+          deleteMany: {},
+          createMany: {
+            data: categories.map((category) => ({
+              categoryId: category.categoryId,
+              amount: category.amount,
+            })),
+          },
+        },
+      },
+      select: {
+        id: true,
+        amount: true,
+        type: true,
+        description: true,
+        TransactionCategory: {
+          select: {
+            categoryId: true,
+            amount: true,
+          },
+        },
+        account: {
+          select: {
+            currency: true,
+          },
+        },
       },
     });
   } catch (error) {
