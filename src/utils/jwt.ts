@@ -1,34 +1,34 @@
 import jwt from "jsonwebtoken";
-import fs from "fs";
+import dotenv from "dotenv";
 
-const privateKey = fs
-  .readFileSync("src/private.pem", "utf8")
-  .replace(/\\n/g, "\n");
-
-const publicKey = fs
-  .readFileSync("src/private.pem", "utf8")
-  .replace(/\\n/g, "\n");
+dotenv.config();
 
 export function signJwt(payload: Object) {
-  return jwt.sign(payload, privateKey, {
-    algorithm: "RS256",
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error("JWT secret is not defined.");
+  }
+  const token = jwt.sign(payload, jwtSecret, {
     expiresIn: "1h",
   });
+  return token;
 }
 
 export function verifyJwt(token: string) {
   try {
-    const payload = jwt.verify(token, publicKey, {
-      algorithms: ["RS256"],
-    });
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error("JWT secret is not defined.");
+    }
+    const payload = jwt.verify(token, jwtSecret);
     return {
       decoded: true,
       payload,
-    }
+    };
   } catch (e: any) {
     return {
       decoded: false,
       payload: e.message,
-    }
+    };
   }
 }
