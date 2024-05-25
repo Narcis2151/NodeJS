@@ -26,26 +26,26 @@ Make sure you have the following installed:
 
 2. Install the dependencies:
 
-```bash
-npm install
-```
+  ```bash
+  yarn install
+  ```
 
 3. Create a `.env` file in the root of the project and add the following environment variables:
 
-```bash
+  ```bash
   DATABASE_URL="replace_with_your_database_url"
   GITHUB_CLIENT_ID = "your_github_client_id"
   GITHUB_CLIENT_SECRET = "your_github_client_secret"
   GITHUB_CALLBACK_URL = "http://localhost:3000/api/auth/github/callback"
   SESSION_SECRET="your_session_secret"
   JWT_SECRET="your_secret_key"
-```
+  ```
 
 4. Run the migrations and generate the Prisma client:
 
-```bash
-npx prisma generate
-```
+  ```bash
+  npx prisma generate
+  ```
 
 5. Start the development server:
 
