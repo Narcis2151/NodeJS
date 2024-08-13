@@ -1,15 +1,15 @@
-import { z } from "zod";
+import {z} from "zod";
 
 export const accountParamsSchema = z.object({
   params: z.object({
-    accountId: z.string({ required_error: "Account ID is required" }),
+    accountId: z.string({required_error: "Account ID is required"}),
   }),
 });
 
 export const createAccountSchema = z.object({
   body: z.object({
-    name: z.string({ required_error: "Account Name is required" }),
-    balance: z.number({ required_error: "Balance is required" }).positive(),
+    name: z.string({required_error: "Account Name is required"}),
+    balance: z.number({required_error: "Balance is required"}).positive(),
     currency: z.enum(["RON", "USD", "EUR", "GBP"], {
       required_error: "Currency is required",
     }),
@@ -19,14 +19,14 @@ export const createAccountSchema = z.object({
 export const updateAccountNameSchema = z.object({
   params: accountParamsSchema.shape.params,
   body: z.object({
-    name: z.string({ required_error: "Account Name is required" }),
+    name: z.string({required_error: "Account Name is required"}),
   }),
 });
 
 export const updateAccountBalanceSchema = z.object({
   params: accountParamsSchema.shape.params,
   body: z.object({
-    balance: z.number({ required_error: "Balance is required" }).positive(),
+    balance: z.number({required_error: "Balance is required"}).positive(),
     currency: z.enum(["RON", "USD", "EUR", "GBP"], {
       required_error: "Currency is required",
     }),
@@ -36,7 +36,7 @@ export const updateAccountBalanceSchema = z.object({
 export const deleteAccountSchema = z.object({
   params: accountParamsSchema.shape.params,
   body: z.object({
-    newAccountId: z.number({ required_error: "New Account ID is required" }),
+    newAccountId: z.number({required_error: "New Account ID is required"}),
   }),
 });
 

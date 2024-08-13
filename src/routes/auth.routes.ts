@@ -89,7 +89,7 @@ router.get(
 router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
-  (req, res) => {
+  (_req, res) => {
     res.redirect("/heartbeat");
   }
 );

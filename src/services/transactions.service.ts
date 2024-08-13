@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
 import {
   CreateTransactionInput,
   UpdateTransactionCategoryInput,
@@ -13,7 +13,7 @@ export async function getTransactions(
   limit: number
 ) {
   const skip = (page - 1) * limit;
-  return await prisma.transaction.findMany({
+  return prisma.transaction.findMany({
     where: {
       userId: userId,
     },
@@ -66,7 +66,7 @@ export async function createTransaction(
     },
   });
 
-  const createdTransaction = await prisma.transaction.create({
+  return prisma.transaction.create({
     data: {
       amount: data.amount,
       type: data.type,
@@ -100,8 +100,6 @@ export async function createTransaction(
       },
     },
   });
-
-  return createdTransaction;
 }
 
 export async function getTransactionById(
